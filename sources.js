@@ -1,34 +1,18 @@
-let sources = JSON.parse(localStorage.getItem("sources")) || [];
-
-function saveSources() {
-  localStorage.setItem("sources", JSON.stringify(sources));
-}
-
-function renderSources() {
-  const list = document.getElementById("sourceList");
-  list.innerHTML = "";
-
-  sources.forEach((src, i) => {
-    const li = document.createElement("li");
-    li.innerHTML = `${src} <button onclick="removeSource(${i})">❌</button>`;
-    list.appendChild(li);
-  });
-}
-
 function addSource() {
-  const url = document.getElementById("sourceUrl").value;
+  const url = document.getElementById("url").value;
   if (!url) return;
 
+  let sources = JSON.parse(localStorage.getItem("sources")) || [];
   sources.push(url);
-  saveSources();
-  renderSources();
-  document.getElementById("sourceUrl").value = "";
+  localStorage.setItem("sources", JSON.stringify(sources));
+  location.reload();
 }
 
-function removeSource(i) {
-  sources.splice(i, 1);
-  saveSources();
-  renderSources();
-}
+const list = document.getElementById("list");
+const sources = JSON.parse(localStorage.getItem("sources")) || [];
 
-renderSources();
+sources.forEach(src => {
+  const li = document.createElement("li");
+  li.textContent = src;
+  list.appendChild(li);
+});
