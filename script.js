@@ -3,12 +3,10 @@ const sources = JSON.parse(localStorage.getItem("sources")) || [];
 
 list.innerHTML = "";
 
-// If no sources
 if (sources.length === 0) {
   list.innerHTML = "<p>No sources added. Go to 📡 Manage Sources.</p>";
 }
 
-// Load manga from each source
 sources.forEach(url => {
   fetch(url)
     .then(res => res.json())
@@ -17,7 +15,7 @@ sources.forEach(url => {
         const div = document.createElement("div");
         div.style.padding = "12px";
         div.style.margin = "10px 0";
-        div.style.border = "1px solid #000";
+        div.style.border = "1px solid black";
         div.style.cursor = "pointer";
 
         div.innerText = manga.title;
@@ -29,8 +27,5 @@ sources.forEach(url => {
 
         list.appendChild(div);
       });
-    })
-    .catch(err => {
-      console.log("Failed to load source:", err);
     });
 });
