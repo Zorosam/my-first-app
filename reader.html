@@ -9,9 +9,9 @@
 <body>
 
   <h2 id="manga-title">Loading...</h2>
-  <button onclick="addToLibrary()">⭐ Add to Library</button>
 
   <select id="chapterSelect"></select>
+  <button onclick="addToLibrary()">⭐ Add to Library</button>
   <button onclick="downloadChapter()">⬇ Download Chapter</button>
 
   <div id="pages"></div>
@@ -29,22 +29,41 @@
       manga.chapters.forEach((ch, i) => {
         const option = document.createElement("option");
         option.value = i;
-        option.text = ch.name;
+        option.textContent = ch.name;
         chapterSelect.appendChild(option);
       });
 
+      function progressKey(chIndex) {
+        return `progress_${manga.title}_chapter_${chIndex}`;
+      }
+
       function loadChapter(index) {
         pagesDiv.innerHTML = "";
+
         manga.chapters[index].pages.forEach(url => {
           const img = document.createElement("img");
           img.src = url;
           pagesDiv.appendChild(img);
         });
+
+        // Restore scroll position
+        const savedScroll = localStorage.getItem(progressKey(index));
+        if (savedScroll) {
+          setTimeout(() => {
+            window.scrollTo(0, parseInt(savedScroll));
+          }, 300);
+        }
       }
 
       chapterSelect.onchange = () => {
         loadChapter(chapterSelect.value);
       };
+
+      // Save scroll position
+      window.addEventListener("scroll", () => {
+        const ch = chapterSelect.value;
+        localStorage.setItem(progressKey(ch), window.scrollY);
+      });
 
       loadChapter(0);
     }
@@ -57,17 +76,17 @@
       }
       alert("✅ Chapter downloaded for offline reading!");
     }
-  function addToLibrary() {
-    let library = JSON.parse(localStorage.getItem("library")) || [];
 
-    if (!library.find(m => m.title === manga.title)) {
-      library.push(manga);
-      localStorage.setItem("library", JSON.stringify(library));
-      alert("✅ Added to Library");
-    } else {
-      alert("ℹ️ Already in Library");
+    function addToLibrary() {
+      let library = JSON.parse(localStorage.getItem("library")) || [];
+      if (!library.find(m => m.title === manga.title)) {
+        library.push(manga);
+        localStorage.setItem("library", JSON.stringify(library));
+        alert("✅ Added to Library");
+      } else {
+        alert("ℹ️ Already in Library");
+      }
     }
-  }
   </script>
 
 </body>
