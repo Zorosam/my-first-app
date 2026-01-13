@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Manga Reader</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body>
+
+  <h2 id="manga-title">Loading...</h2>
+
+  <div id="pages"></div>
+
+  <script>
+    // Get selected manga from storage
+    const manga = JSON.parse(localStorage.getItem("selectedManga"));
+
+    if (!manga) {
+      document.body.innerHTML = "<p>No manga selected.</p>";
+    } else {
+      document.getElementById("manga-title").innerText = manga.title;
+
+      const pagesDiv = document.getElementById("pages");
+
+      // Load first chapter pages
+      manga.chapters[0].pages.forEach(page => {
+        const img = document.createElement("img");
+        img.src = page;
+        img.style.width = "100%";
+        img.style.display = "block";
+        img.style.marginBottom = "10px";
+        pagesDiv.appendChild(img);
+      });
+    }
+  </script>
+
+</body>
+</html>
