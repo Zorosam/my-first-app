@@ -1,0 +1,18 @@
+{
+  "sourceName": "Sample Source",
+  "manga": [
+    {
+      "title": "Demo Manga",
+      "chapters": [
+        {
+          "name": "Chapter 1",
+          "pages": [
+            "https://via.placeholder.com/600x900?text=Page+1",
+            "https://via.placeholder.com/600x900?text=Page+2",
+            "https://via.placeholder.com/600x900?text=Page+3"
+          ]
+        }
+      ]
+    }
+  ]
+}
