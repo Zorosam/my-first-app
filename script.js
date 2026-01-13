@@ -13,6 +13,7 @@ sources.forEach(url => {
     .then(data => {
       data.manga.forEach(manga => {
         const div = document.createElement("div");
+        div.className = "manga-card";
         div.style.padding = "12px";
         div.style.margin = "10px 0";
         div.style.border = "1px solid black";
