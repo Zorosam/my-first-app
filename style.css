@@ -1,0 +1,50 @@
+/* ===== Global Dark Theme ===== */
+body {
+  margin: 0;
+  padding: 12px;
+  background: #0d0d0d;
+  color: #eaeaea;
+  font-family: system-ui, -apple-system, sans-serif;
+}
+
+/* Buttons */
+button {
+  background: #1f1f1f;
+  color: #fff;
+  border: 1px solid #333;
+  padding: 10px 14px;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+/* Links */
+a {
+  text-decoration: none;
+}
+
+/* Manga cards */
+.manga-card {
+  background: #141414;
+  border: 1px solid #222;
+  border-radius: 8px;
+  padding: 14px;
+  margin: 10px 0;
+  cursor: pointer;
+}
+
+.manga-card:hover {
+  background: #1c1c1c;
+}
+
+/* Reader */
+img {
+  width: 100%;
+  display: block;
+  margin-bottom: 12px;
+  border-radius: 4px;
+}
+
+/* Header */
+h1, h2 {
+  margin-top: 8px;
+}
