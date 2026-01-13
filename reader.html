@@ -57,6 +57,17 @@
       }
       alert("✅ Chapter downloaded for offline reading!");
     }
+  function addToLibrary() {
+    let library = JSON.parse(localStorage.getItem("library")) || [];
+
+    if (!library.find(m => m.title === manga.title)) {
+      library.push(manga);
+      localStorage.setItem("library", JSON.stringify(library));
+      alert("✅ Added to Library");
+    } else {
+      alert("ℹ️ Already in Library");
+    }
+  }
   </script>
 
 </body>
