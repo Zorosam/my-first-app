@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Library</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <h1>📚 My Library</h1>
+  <a href="index.html">
+    <button>⬅ Back to Home</button>
+  </a>
+
+  <div id="library-list"></div>
+
+  <script>
+    const libraryDiv = document.getElementById("library-list");
+    const library = JSON.parse(localStorage.getItem("library")) || [];
+
+    if (library.length === 0) {
+      libraryDiv.innerHTML = "<p>No manga in library.</p>";
+    } else {
+      library.forEach(manga => {
+        const div = document.createElement("div");
+        div.className = "manga-card";
+        div.innerText = manga.title;
+
+        div.onclick = () => {
+          localStorage.setItem("selectedManga", JSON.stringify(manga));
+          window.location.href = "reader.html";
+        };
+
+        libraryDiv.appendChild(div);
+      });
+    }
+  </script>
+
+</body>
+</html>
