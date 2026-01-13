@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html>
-
 <head>
   <title>Manga Reader</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -15,38 +14,28 @@
   <div id="pages"></div>
 
   <script>
-    // Get selected manga from storage
     const manga = JSON.parse(localStorage.getItem("selectedManga"));
+    const pagesDiv = document.getElementById("pages");
 
     if (!manga) {
       document.body.innerHTML = "<p>No manga selected.</p>";
     } else {
       document.getElementById("manga-title").innerText = manga.title;
 
-      const pagesDiv = document.getElementById("pages");
-
-      // Load first chapter pages
-      manga.chapters[0].pages.forEach(page => {
+      manga.chapters[0].pages.forEach(url => {
         const img = document.createElement("img");
-        img.src = page;
-        img.style.width = "100%";
-        img.style.display = "block";
-        img.style.marginBottom = "10px";
+        img.src = url;
         pagesDiv.appendChild(img);
       });
     }
-  // existing code above stays the same
 
-  async function downloadChapter() {
-    const cache = await caches.open("manga-offline-v1");
-    const pages = manga.chapters[0].pages;
-
-    for (let url of pages) {
-      await cache.add(url);
+    async function downloadChapter() {
+      const cache = await caches.open("manga-offline-v2");
+      for (const url of manga.chapters[0].pages) {
+        await cache.add(url);
+      }
+      alert("✅ Chapter downloaded for offline reading!");
     }
-
-    alert("✅ Chapter downloaded for offline reading!");
-  }
   </script>
 
 </body>
