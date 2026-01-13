@@ -11,29 +11,29 @@
   <h1>📚 My Library</h1>
 
   <a href="index.html">
-    <button>⬅ Back to Home</button>
+    <button>⬅ Back</button>
   </a>
 
   <div id="library-list"></div>
 
   <script>
-    const libraryDiv = document.getElementById("library-list");
+    const list = document.getElementById("library-list");
     const library = JSON.parse(localStorage.getItem("library")) || [];
 
     if (library.length === 0) {
-      libraryDiv.innerHTML = "<p>No manga in library.</p>";
+      list.innerHTML = "<p>No manga saved.</p>";
     } else {
       library.forEach(manga => {
         const div = document.createElement("div");
         div.className = "manga-card";
-        div.textContent = manga.title;
+        div.innerText = manga.title;
 
         div.onclick = () => {
           localStorage.setItem("selectedManga", JSON.stringify(manga));
           window.location.href = "reader.html";
         };
 
-        libraryDiv.appendChild(div);
+        list.appendChild(div);
       });
     }
   </script>
