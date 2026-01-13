@@ -9,6 +9,8 @@
 <body>
 
   <h2 id="manga-title">Loading...</h2>
+
+  <select id="chapterSelect"></select>
   <button onclick="downloadChapter()">⬇ Download Chapter</button>
 
   <div id="pages"></div>
@@ -16,22 +18,40 @@
   <script>
     const manga = JSON.parse(localStorage.getItem("selectedManga"));
     const pagesDiv = document.getElementById("pages");
+    const chapterSelect = document.getElementById("chapterSelect");
 
     if (!manga) {
       document.body.innerHTML = "<p>No manga selected.</p>";
     } else {
       document.getElementById("manga-title").innerText = manga.title;
 
-      manga.chapters[0].pages.forEach(url => {
-        const img = document.createElement("img");
-        img.src = url;
-        pagesDiv.appendChild(img);
+      manga.chapters.forEach((ch, i) => {
+        const option = document.createElement("option");
+        option.value = i;
+        option.text = ch.name;
+        chapterSelect.appendChild(option);
       });
+
+      function loadChapter(index) {
+        pagesDiv.innerHTML = "";
+        manga.chapters[index].pages.forEach(url => {
+          const img = document.createElement("img");
+          img.src = url;
+          pagesDiv.appendChild(img);
+        });
+      }
+
+      chapterSelect.onchange = () => {
+        loadChapter(chapterSelect.value);
+      };
+
+      loadChapter(0);
     }
 
     async function downloadChapter() {
       const cache = await caches.open("manga-offline-v2");
-      for (const url of manga.chapters[0].pages) {
+      const index = chapterSelect.value;
+      for (const url of manga.chapters[index].pages) {
         await cache.add(url);
       }
       alert("✅ Chapter downloaded for offline reading!");
