@@ -21,11 +21,15 @@
     const pagesDiv = document.getElementById("pages");
     const chapterSelect = document.getElementById("chapterSelect");
 
+    let currentChapter = 0;
+    let allowSave = false;
+
     if (!manga) {
       document.body.innerHTML = "<p>No manga selected.</p>";
     } else {
       document.getElementById("manga-title").innerText = manga.title;
 
+      // Populate chapter selector
       manga.chapters.forEach((ch, i) => {
         const option = document.createElement("option");
         option.value = i;
@@ -33,52 +37,66 @@
         chapterSelect.appendChild(option);
       });
 
-      function progressKey(chIndex) {
-        return `progress_${manga.title}_chapter_${chIndex}`;
+      function progressKey() {
+        return `progress_${manga.title}_chapter_${currentChapter}`;
       }
 
       function loadChapter(index) {
+        allowSave = false;
+        currentChapter = Number(index);
         pagesDiv.innerHTML = "";
 
-        manga.chapters[index].pages.forEach(url => {
+        const pages = manga.chapters[currentChapter].pages;
+
+        pages.forEach((url, i) => {
           const img = document.createElement("img");
           img.src = url;
+
+          img.onload = () => {
+            // When last image loads, restore progress
+            if (i === pages.length - 1) {
+              const saved = localStorage.getItem(progressKey());
+              if (saved) {
+                window.scrollTo(0, parseInt(saved));
+              }
+              allowSave = true;
+            }
+          };
+
           pagesDiv.appendChild(img);
         });
-
-        // Restore scroll position
-        const savedScroll = localStorage.getItem(progressKey(index));
-        if (savedScroll) {
-          setTimeout(() => {
-            window.scrollTo(0, parseInt(savedScroll));
-          }, 300);
-        }
       }
 
       chapterSelect.onchange = () => {
         loadChapter(chapterSelect.value);
       };
 
-      // Save scroll position
+      // Save scroll progress
       window.addEventListener("scroll", () => {
-        const ch = chapterSelect.value;
-        localStorage.setItem(progressKey(ch), window.scrollY);
+        if (!allowSave) return;
+        localStorage.setItem(progressKey(), window.scrollY);
       });
 
+      // Load first chapter initially
       loadChapter(0);
     }
 
+    // Download chapter for offline reading
     async function downloadChapter() {
       const cache = await caches.open("manga-offline-v2");
-      const index = chapterSelect.value;
-      for (const url of manga.chapters[index].pages) {
+      const pages = manga.chapters[currentChapter].pages;
+
+      for (const url of pages) {
         await cache.add(url);
       }
+
       alert("✅ Chapter downloaded for offline reading!");
     }
 
+    // Add manga to library
     function addToLibrary() {
       let library = JSON.parse(localStorage.getItem("library")) || [];
+
       if (!library.find(m => m.title === manga.title)) {
         library.push(manga);
         localStorage.setItem("library", JSON.stringify(library));
