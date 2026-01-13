@@ -29,7 +29,6 @@
     } else {
       document.getElementById("manga-title").innerText = manga.title;
 
-      // Populate chapter selector
       manga.chapters.forEach((ch, i) => {
         const option = document.createElement("option");
         option.value = i;
@@ -53,12 +52,9 @@
           img.src = url;
 
           img.onload = () => {
-            // When last image loads, restore progress
             if (i === pages.length - 1) {
               const saved = localStorage.getItem(progressKey());
-              if (saved) {
-                window.scrollTo(0, parseInt(saved));
-              }
+              if (saved) window.scrollTo(0, parseInt(saved));
               allowSave = true;
             }
           };
@@ -67,42 +63,31 @@
         });
       }
 
-      chapterSelect.onchange = () => {
-        loadChapter(chapterSelect.value);
-      };
+      chapterSelect.onchange = () => loadChapter(chapterSelect.value);
 
-      // Save scroll progress
       window.addEventListener("scroll", () => {
-        if (!allowSave) return;
-        localStorage.setItem(progressKey(), window.scrollY);
+        if (allowSave) {
+          localStorage.setItem(progressKey(), window.scrollY);
+        }
       });
 
-      // Load first chapter initially
       loadChapter(0);
     }
 
-    // Download chapter for offline reading
     async function downloadChapter() {
-      const cache = await caches.open("manga-offline-v2");
-      const pages = manga.chapters[currentChapter].pages;
-
-      for (const url of pages) {
+      const cache = await caches.open("manga-pwa-v1");
+      for (const url of manga.chapters[currentChapter].pages) {
         await cache.add(url);
       }
-
-      alert("✅ Chapter downloaded for offline reading!");
+      alert("Downloaded for offline reading");
     }
 
-    // Add manga to library
     function addToLibrary() {
       let library = JSON.parse(localStorage.getItem("library")) || [];
-
       if (!library.find(m => m.title === manga.title)) {
         library.push(manga);
         localStorage.setItem("library", JSON.stringify(library));
-        alert("✅ Added to Library");
-      } else {
-        alert("ℹ️ Already in Library");
+        alert("Added to library");
       }
     }
   </script>
