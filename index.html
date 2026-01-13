@@ -1,32 +1,29 @@
 <!DOCTYPE html>
 <html>
-
 <head>
   <title>My First App</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-  <!-- Button to open Source Manager -->
   <a href="sources.html">
     <button>📡 Manage Sources</button>
   </a>
 
-  <!-- App title -->
   <h1>Hello 👋</h1>
   <p>My app is live on GitHub!</p>
 
-  <!-- Manga list will show here later -->
   <div id="manga-list"></div>
 
-  <!-- Connect JavaScript -->
-<script src="script.js?v=2"></script>
+  <script src="script.js?v=3"></script>
 
-<script>
-  if ("serviceWorker" in navigator) {
-    navigator.serviceWorker.register("sw.js");
-  }
-</script>
+  <script>
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("sw.js");
+    }
+  </script>
+
 </body>
 </html>
